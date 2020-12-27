@@ -1,6 +1,16 @@
-
-
-
+class Rat {
+    constructor(name) {
+        
+    }
+    unite(rat) {
+        if (Object.keys(rat) == 2) {
+            this.unitedRats.push(rat);
+        };
+    }
+    getRats() {
+        return this.unitedRats.toString;
+    }
+}
 
 let firstRat = new Rat("Peter");
 console.log(firstRat.toString()); // Peter
