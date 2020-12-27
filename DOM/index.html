@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 id="blue">Heading</h1>
+    <ul>
+        <li>list one</li>
+        <li>list two</li>
+        <li class="yellow">list three</li>
+    </ul>
+
+    <script>
+        let blueElement = document.getElementById('blue');
+        blueElement.style.backgroundColor = 'blue';
+        blueElement.style.color = 'white';
+        blueElement.innerHTML += ' Bigger';
+
+        let yellowElement = document.getElementsByClassName('yellow');
+        yellowElement[0].style.backgroundColor = 'yellow';
+        yellowElement[0].style.fontSize = '22px';
+        console.log(yellowElement);
+
+        let newOrderedList = document.createElement('ol')
+        let names = ['Gergi', 'Dragoj', 'Gocho', 'Chicho', 'Rumen'];
+        names.forEach(name => {
+            let listElement = document.createElement('li');
+            listElement.textContent = name;
+            newOrderedList.appendChild(listElement);
+        });
+
+        document.body.appendChild(newOrderedList);
+
+    </script>
+</body>
+</html>
