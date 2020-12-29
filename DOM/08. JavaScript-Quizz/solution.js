@@ -1,21 +1,33 @@
 function solve() {
-  
-  let ulElement = document.getElementsByClassName('current');
-  let listElements = document.getElementsByClassName('quiz-answer');
-  let sectionElements = document.getElementsByTagName('section');
+   
+  let sections = document.getElementsByTagName('section');
   let quizElement = document.getElementById('quizzie');
   let rightAnswers = 0;
   let i = 0;
 
   quizElement.addEventListener('click', function(event) {
 
-    let current = (event.target.parentElement.parentElement);
-    console.log(current.getAttribute(quizIndex));
-    if (event.target.innerHTML == 'onmouseclick') {
-      console.log(true);
-    } else if (current.dataset.quizIndex == '4') {
-      console.log(false);
-    }
+    let parent = event.target.parentElement.parentElement;
+    let data = parent.getAttribute('data-quizIndex');
+    if (data == '4' || data == '2') {
+      if ((i == 0 && data == '2') || (i == 1 && data == '4') || (i == 2 && data == '2')) {
+        rightAnswers++;
+      }; 
+      sections[i].style.display = 'none';
+      i++;
+      
+      if (i > 2) {
+        let result = document.getElementsByTagName('h1');
+        result = result[1];
+        document.getElementById('results').style.display = 'block';
+        if (rightAnswers == 3) {
+          result.textContent = 'You are recognized as top JavaScript fan!';
+        } else {
+          result.textContent = `You have ${rightAnswers} right answers`;
+        }
+      } else {
+        sections[i].style.display = 'block';
+      };
+    };
   });
-
-}
+};
