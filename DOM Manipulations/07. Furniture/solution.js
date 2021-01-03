@@ -1,37 +1,43 @@
 function solve() {
 
-  let input = ([{
-    "img":"https://www.ikea.com/PIAimages/0447583_PE597395_S5.JPG",
-    "name": "Sofa",
-    "price": "259",
-    "decFactor":"0.4"
+    document.querySelector('button').addEventListener('click', () => {
+    let input = document.querySelector('textarea');
+    let product = JSON.parse(input.value);
 
-},
-{
-    "img":"https://cdn.jysk.ca/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/7/0/7011671065_3dr_sonoma.jpg",
-    "name": "Wardrobe",
-    "price": "120",
-    "decFactor":"1.2"
-}]);
+    product.forEach(element => {
+    let {name, img, price, decFactor} = element;
+      let htmlString = 
+                    `<tr>\n
+                        <td><img src="${img}"></td>\n
+                        <td><p>${name}</p></td>\n
+                        <td><p>${price}</p></td>\n                    
+                        <td><p>${decFactor}</p></td>\n                
+                        <td><input type="checkbox" /></td>\n
+                    </tr>`;
 
+    document
+    .querySelector('tbody')
+    .insertAdjacentHTML('beforeend', htmlString);
+    });
+  input.value = '';      
+  });
 
+  document.querySelectorAll('button')[1].addEventListener('click', () => {
+    let [products, prices, factors] = [[], [], []];
+    [...document.querySelectorAll('tbody tr')].forEach(tr => {
+      if (tr.querySelectorAll('input')[0].checked) {
+        let data = tr.querySelectorAll('p');
+        products.push(data[0].textContent);
+        prices.push(Number(data[1].textContent));
+        factors.push(Number(data[2].textContent));
+      };
+    });
 
-class Item {
-  constructor(img, name, price, decor) {
-    this.image = img,
-    this.name = name,
-    this.price = price,
-    this.deFactor = decor
-  }
-};
-
-let inputText = document.getElementById('exercise').querySelector('textarea');
-
-for (let item of input) {
-  let current = [...item];
-  for (let line of current) {
-    inputText.textContent += line;
-  }
-}
-
+    let totalPrice = prices.reduce((sum, num) => sum += num);
+    let totalFactor = factors.reduce((sum, num) => sum += num);
+    totalFactor = totalFactor / factors.length;
+    document.querySelectorAll('textarea')[1].textContent = `Bought furniture: ${products.join(', ')}`+'\n' + 
+    `Total price: ${totalPrice.toFixed(2)}` + '\n' + 
+    `Average decoration factor: ${totalFactor}`;
+  });
 };
