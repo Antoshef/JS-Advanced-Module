@@ -3,13 +3,13 @@ class Company {
         this.departments = [];
     }
     addEmployee(username, Salary, Position, Department) {
-        this.name = username,
-        this.salary = Salary,
-        this.position = Position,
-        this.department = Department;
+            this.name = username,
+            this.salary = Salary,
+            this.position = Position,
+            this.department = Department;
 
         if (this.name && this.salary > 0 && this.position && this.department) {
-            this.departments.push(this.addEmployee());
+            this.departments.push(Employee);
             console.log(`New employee is hired. Name: ${this.name}. Position: ${this.position}`);
         } else if (this.salary <= 0) {
             console.log(' Invalid input!');
