@@ -84,3 +84,7 @@ input {
     padding: 11px;
     font-weight: bold;
 }
+
+img {
+    width: 90px;
+}
