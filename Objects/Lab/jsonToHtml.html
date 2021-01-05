@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FromJSONToHTMLTable</title>
+    <style>
+        table,th{
+            border: groove;
+            border-collapse: collapse;
+        }
+        td{
+            border: 1px solid black;
+        }
+        td,th{
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+    </div>
+    <script>
+        function fromJSONToHTMLTable(input){
+            let args = JSON.parse(input);
+            let keys = Object.keys(args[0]);
+            let name = keys[0];
+            let value = keys[1];
+            let result = '<table>' + '\n';
+                result += '   <tr><th>' + keys[0] + '</th><th>' + keys[1] + '</th></tr>' + '\n';
+            for (let arg of args) {
+                let argName = arg[name];
+                encoding(argName);
+                result +=  '   <tr><td>' + argName + '</td><td>' + arg[value] + '</td></tr>' + '\n';
+            };
+            result += '</table>';
+
+            function encoding(x) {
+                let check = x.split('');
+                let array = [];
+                check.forEach(element => {
+                    let y = element;
+                    if (element == '&') {
+                        y = '&amp;'
+                    } else if (element == '<') {
+                        y = '&lt;'
+                    } else if (element == '>') {
+                        y = '&gt;'
+                    } else if (element == '"') {
+                        y = '&quot;'
+                    };
+                    array.push(y);
+                });
+                array = array.join('');
+                return array;
+            }
+            return result;
+        };
+        window.onload = function(){
+            let container = document.getElementById('wrapper');
+            container.innerHTML = fromJSONToHTMLTable(['[{"Name":"Pesho <div>-a","Age":20,"City":"Sofia"},{"Name":"Gosho","Age":18,"City":"Plovdiv"},{"Name":"Angel","Age":18,"City":"Veliko Tarnovo"}]']
+);
+        };
+    </script>
+</body>
+</html>
