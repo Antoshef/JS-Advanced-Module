@@ -1,40 +1,37 @@
 function inputCheck(input) { 
     // Validate Width and Height
     let [n, m] = input.shift()
-    .split(' ')
-    .map(Number)
     .filter(x => x <= 100 && x > 0);
     if ((isNaN(n) || isNaN(m)) || (n % 2 == 1 || m % 2 == 1)) {
         console.log('Invalid fundament size!');
         return -1;
     };
-
+ 
     // Validate Floor Size
-    let groundFloor = input.shift();
-    let bricksQty = groundFloor
-    .split(' ')
-    .length;
+    let firstFloor = input;
+    let bricksQty = 0;
+    firstFloor.forEach(x => {
+        bricksQty += x.length;
+    });
     if (bricksQty != n * m) {
         console.log('Bricks exceed floor size');
         return -1;
     };
-    let firstFloor = [];
-    groundFloor = groundFloor.split(' ');
     let bricksUsed = {};
+    let secondFloor = [];
 
     // Building a matrix of the First floor
     for (let i = 0; i < n; i++) {
-        let row = [];
+        secondFloor.push([]);
         for (let o = 0; o < m; o++) {
-            let current = groundFloor.shift()
-            .split('\n')[0];
+            let current = firstFloor[i][o];
+            secondFloor[i].push(0);
 
             // Validating Current Brick
             if (current < 1) {
                 console.log('Error! Invalid Brick');
                 return -1;
             };
-            row.push(current);
 
             // Adding used Brick and Size
             if (bricksUsed[current]) {
@@ -43,7 +40,6 @@ function inputCheck(input) {
                 bricksUsed[current] = 1;
             };
         };
-        firstFloor.push(row);
     };
 
     // Validating Bricks size
@@ -58,16 +54,6 @@ function inputCheck(input) {
     let bricks = Object.keys(bricksUsed);
     bricks = bricks.map(Number);
     bricks.sort((a, b) => {return 0.5 - Math.random()});
-
-    // Filling Second floor with elements
-    let floor = new Array(n)
-    .fill([]);
-    let secondFloor = [];
-    floor.forEach(row => {
-        let newRow = new Array(m)
-        .fill(0);
-        secondFloor.push(newRow);
-    });
 
     let result = [];
     result.push(firstFloor, secondFloor, bricks, n, m);
@@ -209,11 +195,11 @@ function buildingSecondFloor(input) {
     };
 };
 
-let firstFloor = inputCheck(['4 6',
-`12 13 13 15 15 18
- 12 20 33 38 38 18
- 14 20 33 34 34 35
- 14 36 36 37 37 35`
+let firstFloor = inputCheck([[4, 6],
+ [12, 13, 13, 15, 15, 18],
+ [12, 20, 33, 38, 38, 18],
+ [14, 20, 33, 34, 34, 35],
+ [14, 36, 36, 37, 37, 35],
 ]);
 
 buildingSecondFloor(firstFloor);
