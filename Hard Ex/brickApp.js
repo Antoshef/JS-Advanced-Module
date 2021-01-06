@@ -1,80 +1,101 @@
-function inputCheck(input) { 
-    // Validate Width and Height
-    let [n, m] = input.shift()
-    .split(' ')
-    .map(Number)
-    .filter(x => x <= 100 && x > 0);
-    if ((isNaN(n) || isNaN(m)) || (n % 2 == 1 || m % 2 == 1)) {
+// class Table {
+//     constructor() {
+//         this.inputArray = [];
+//         this.inputTable = '';
+//     }
+
+//     get inputArrayValue() {
+//         return this.inputArray;
+//     }
+
+//     static validateInput() {
+//         let newInputArray = [];
+//         let tableHeight = document.getElementById('height');
+//         let tableWidth = document.getElementById('width');
+//         inputTable.innerHTML = '';
+
+//         // Validate table width and height
+//         if ((tableHeight.value % 2 == 1 || tableWidth.value % 2 == 1) 
+//         || (tableHeight.value <= 0 || tableWidth.value <= 0)) {
+//             console.log('Invalid fundament size!');
+//             alert('Invalid fundament size!');
+//             return -1;
+//         };
+
+//         for (let row = 0; row < tableHeight.value; row++) {
+//             let currentRow = `<tr>\n`;
+//             newInputArray.push([]);
+//             for (let col = 0; col < tableWidth.value; col++) {
+//                 newInputArray[row].push(0);
+//                 currentRow += `<td><input type="number"></td>\n`;
+//             };
+//             currentRow += `</tr>\n`;
+//             inputTable.insertAdjacentHTML('beforeend', currentRow);
+//         };
+
+//         tableHeight.value = '';
+//         tableWidth.value = '';
+//         topText.style.display = 'none';
+//         this.inputArray = newInputArray;
+//         this.inputTable = inputTable.innerHTML;
+//     };
+// };
+
+// const table = new Table();
+
+let inputArray
+let inputTable = document.getElementsByClassName('input-table')[0];
+let topText = document.getElementsByTagName('header')[0];
+
+let sizeButton = document.getElementById('btn-input');
+sizeButton.addEventListener('click', validateInput);
+
+let inputTableResult = inputTable.innerHTML;
+
+let clearTable = document.getElementById('btn-clear-table');
+clearTable.addEventListener('click', clearTbl);
+
+let enterButton = document.getElementsByClassName('btn')[2];
+enterButton.addEventListener('click', displayResult);
+
+function validateInput() {
+    let newInputArray = [];
+    let tableHeight = document.getElementById('height');
+    let tableWidth = document.getElementById('width');
+    inputTable.innerHTML = '';
+
+    // Validate table width and height
+    if ((tableHeight.value % 2 == 1 || tableWidth.value % 2 == 1) 
+    || (tableHeight.value <= 0 || tableWidth.value <= 0)) {
         console.log('Invalid fundament size!');
+        alert('Invalid fundament size!');
         return -1;
     };
 
-    // Validate Floor Size
-    let groundFloor = input.shift();
-    let bricksQty = groundFloor
-    .split(' ')
-    .length;
-    if (bricksQty != n * m) {
-        console.log('Bricks exceed floor size');
-        return -1;
-    };
-    let firstFloor = [];
-    groundFloor = groundFloor.split(' ');
-    let bricksUsed = {};
-
-    // Building a matrix of the First floor
-    for (let i = 0; i < n; i++) {
-        let row = [];
-        for (let o = 0; o < m; o++) {
-            let current = groundFloor.shift()
-            .split('\n')[0];
-
-            // Validating Current Brick
-            if (current < 1) {
-                console.log('Error! Invalid Brick');
-                return -1;
-            };
-            row.push(current);
-
-            // Adding used Brick and Size
-            if (bricksUsed[current]) {
-                bricksUsed[current] += 1;
-            } else {
-                bricksUsed[current] = 1;
-            };
+    for (let row = 0; row < tableHeight.value; row++) {
+        let currentRow = `<tr>\n`;
+        newInputArray.push([]);
+        for (let col = 0; col < tableWidth.value; col++) {
+            newInputArray[row].push(0);
+            currentRow += `<td><input type="number"></td>\n`;
         };
-        firstFloor.push(row);
+        currentRow += `</tr>\n`;
+        inputTable.insertAdjacentHTML('beforeend', currentRow);
     };
 
-    // Validating Bricks size
-    let bricksSize = Object.values(bricksUsed);
-    let falseSize = bricksSize.filter(x => x != 2);
-    if (falseSize.length > 0) {
-        console.log('Error! Ivalid brick sizes');
-        return -1;
-    };
-
-    // Place Bricks randomly
-    let bricks = Object.keys(bricksUsed);
-    bricks = bricks.map(Number);
-    bricks.sort((a, b) => {return 0.5 - Math.random()});
-
-    // Filling Second floor with elements
-    let floor = new Array(n)
-    .fill([]);
-    let secondFloor = [];
-    floor.forEach(row => {
-        let newRow = new Array(m)
-        .fill(0);
-        secondFloor.push(newRow);
-    });
-
-    let result = [];
-    result.push(firstFloor, secondFloor, bricks, n, m);
-    return result;
+    tableHeight.value = '';
+    tableWidth.value = '';
+    topText.style.display = 'none';
+    inputArray = newInputArray;
 };
 
-function buildingSecondFloor(input) {
+function clearTbl() {
+    inputTable.innerHTML = '';
+    topText.style.display = 'block';
+    console.log(inputArray);
+};
+
+function displayResult() {
     // Take input
     let [fFloor, sFloor, bricks, rows, cols] = input;
     let [row, col] = [0, 0];
@@ -207,13 +228,4 @@ function buildingSecondFloor(input) {
     } else {
         sFloor.forEach(x => console.log(x.join(' ')));
     };
-};
-
-let firstFloor = inputCheck(['4 6',
-`12 13 13 15 15 18
- 12 20 33 38 38 18
- 14 20 33 34 34 35
- 14 36 36 37 37 35`
-]);
-
-buildingSecondFloor(firstFloor);
+}
