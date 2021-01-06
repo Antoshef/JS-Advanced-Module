@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorMate</title>
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+    input[type=number] {
+    -moz-appearance: textfield;
+    }
+    h1, h3{
+        text-align: center;
+    }
+    .input-data{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    table{
+        margin: 20px;
+    }
+    table, tr, td{
+        border: 1px solid black;
+    }
+    input{
+        width: 25px;
+        height: 25px;
+        text-align: center;
+    }
+    .btn{
+        width: max-content;
+        height: max-content;
+    }
+    #height, #width{
+        width: 55px;
+        height: 20px;
+    }
+</style>
+</head>
+<body> 
+    <header>
+        <h1>Brickwork</h1>
+        <div>
+            <h3 id="instructions">Write parameters for bricks to build<br>
+                a fundament for wall</h3>
+        </div>
+    </header>
+    <main class="input-data">
+        <div class="floor-size">
+            <form method="get">
+                <input type="number" id="height" name="height" placeholder="height" autocomplete="off">
+                <input type="number" id="width" name="width" placeholder="width" autocomplete="off">
+                <input class="btn" id="btn-input" type="button" value="Submit">
+                <input class="btn" id="btn-clear-table" type="button" value="Clear Table">
+            </form>
+        </div>
+        <div>
+            <table>
+                <tbody class="input-table">
+                </tbody>
+            </table>
+        </div>
+        <div class="result">
+            <button class="btn">Enter Input</button>
+            <table>
+                <tbody class="input-table">
+                </tbody>
+            </table>
+        </div>
+    </main>
+<script src="./brickApp.js">
+</script>
+</body>
+</html>
