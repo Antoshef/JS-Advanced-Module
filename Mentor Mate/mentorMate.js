@@ -67,7 +67,7 @@ function buildingSecondFloor(input) {
     let newBrick = bricks.shift();
 
     // Stop Iterator, if solution can't be found
-    let stopIterator = 5;
+    let stopIterator = 3;
 
     // Create Second Floor
     while (newBrick && stopIterator > 0) {
@@ -217,11 +217,11 @@ function buildingSecondFloor(input) {
     };
 };
 
-let firstFloor = inputCheck([[4, 8],
- [15,15,22,22,44,44,85,90],
- [26,26,89,89,82,82,85,90],
- [65,64,64,32,55,58,58,70],
- [65,5,5,32,55,7,7,70],
+let firstFloor = inputCheck([[4, 10],
+ [1,1,10,10,15,19,22,22,23,28],
+ [34,34,30,30,15,19,29,29,23,28],
+ [45,46,49,49,50,51,55,89,64,64],
+ [45,46,70,70,50,51,55,89,68,68],
 ]);
 
 buildingSecondFloor(firstFloor);

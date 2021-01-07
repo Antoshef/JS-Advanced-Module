@@ -1,5 +1,5 @@
 
-let obj = {
+let fundament = {
     validateInput() {
         // Take Input
         let newInputArray = [];
@@ -10,7 +10,6 @@ let obj = {
         // Validate Table Width and Height
         if ((tableHeight.value % 2 == 1 || tableWidth.value % 2 == 1) 
         || (tableHeight.value <= 0 || tableWidth.value <= 0)) {
-            console.log('Invalid fundament size!');
             alert('Invalid fundament size!');
             return -1;
         };
@@ -29,14 +28,15 @@ let obj = {
         };
 
         // Add Result to Object
-        obj.rows = tableHeight.value;
-        obj.cols = tableWidth.value;
+        document.getElementById('hidden').style.display = 'block';
+        fundament.rows = tableHeight.value;
+        fundament.cols = tableWidth.value;
         tableHeight.value = '';
         tableWidth.value = '';
         outputTable.innerHTML = '';
         instructionsText.innerHTML = 'Insert bricks with numbers.<br>Two blocks form one brick.';
-        obj.sFloor = newInputArray;
-        obj.inputText = inputTable;
+        fundament.sFloor = newInputArray;
+        fundament.inputText = inputTable;
     },
 
     // Clear Button
@@ -45,11 +45,12 @@ let obj = {
         instructionsText.innerHTML = 'Set Fundament Width and Height.<br>Each parameter should be even number.'
         outputTable.innerHTML = '';
         document.getElementsByTagName('header')[0].style.display = 'block';
+        document.getElementById('hidden').style.display = 'none';
     },
 
     displayResult() {
         // Take input
-        let [text, sFloor, rows, cols] = [obj.inputText, obj.sFloor, obj.rows, obj.cols];
+        let [text, sFloor, rows, cols] = [fundament.inputText, fundament.sFloor, fundament.rows, fundament.cols];
         let inputElements = text.querySelectorAll('input');
         let fFloor = [];
         let y = 0;
@@ -57,13 +58,17 @@ let obj = {
         document.getElementsByTagName('header')[0].style.display = 'none';
 
         // Validating input
-        for (let i = 0; i < obj.rows; i++) {
+        for (let i = 0; i < fundament.rows; i++) {
             let currentRow = [];
-            for (let o = 0; o < obj.cols; o++) {
+            for (let o = 0; o < fundament.cols; o++) {
                 let currentElement = inputElements[y].value;
                 let cc = Number(currentElement);
-                if (cc < 10) {
-                    cc = '0' + cc;
+                if (cc < 5) {
+                    cc += 70;
+                } else if (cc < 10) {
+                    cc += 40;
+                } else if (cc < 20) {
+                    cc += 50;
                 };
                 if (currentElement % 5 == 0) {
                     inputElements[y].style.backgroundColor = `#${cc}${cc}14`;
@@ -99,7 +104,7 @@ let obj = {
         
         // Validate Bricks input
         let checkBricks = bricks.filter(x => {
-            return x < 1 || x > 100; 
+            return x < 1 || x > 99; 
         });
         if (checkBricks.length > 0) {
             alert('Invalid Bricks used!');
@@ -126,103 +131,63 @@ let obj = {
     
             // Creating pre-made templates solutions
             // 5 Column template --> 1 Vertical and 4 Horizontal Bricks
-            let vertHorHor = (fFloor[row][col] == fFloor[row + 1][col])
-            && (fFloor[row][col + 1] == fFloor[row][col + 2])
-            && (fFloor[row + 1][col + 1] == fFloor[row + 1][col + 2])
-            && (fFloor[row][col + 3] == fFloor[row][col + 4])
-            && (fFloor[row + 1][col + 3] == fFloor[row + 1][col + 4])
-            && (col < cols - 4);
-    
-            // 5 Column template --> 4 Horizontal and 1 Vertical Brick
-            let horHorVert = (fFloor[row][col] == fFloor[row][col + 1])
-            && (fFloor[row + 1][col] == fFloor[row + 1][col + 1]) 
-            && (fFloor[row][col + 2] == fFloor[row][col + 3])
-            && (fFloor[row + 1][col + 2] == fFloor[row + 1][col + 3])
-            && (fFloor[row][col + 4] == fFloor[row + 1][col + 4])
-            && (col < cols - 4);
-    
-            // 4 Column template --> 4 Horizontal Bricks
-            let horHor = (fFloor[row][col] == fFloor[row][col + 1])
-            && (fFloor[row + 1][col] == fFloor[row + 1][col + 1])  
-            && (fFloor[row][col + 2] == fFloor[row][col + 3])
-            && (fFloor[row + 1][col + 2] == fFloor[row + 1][col + 3])
+            let setVertHorVert = (fFloor[row][col] != fFloor[row + 1][col])
+            && (fFloor[row][col + 1] != fFloor[row][col + 2])  
+            && (fFloor[row + 1][col + 1] != fFloor[row + 1][col + 2])
+            && (fFloor[row][col + 3] != fFloor[row + 1][col + 3])
             && (col < cols - 3);
-    
+
             // 4 Column template --> 1 Vertical, 2 Horizontal and 1 Vertical Bricks
-            let vertHorVert = (fFloor[row][col] == fFloor[row + 1][col]) 
-            && (fFloor[row][col + 1] == fFloor[row][col + 2]) 
-            && (fFloor[row + 1][col + 1] == fFloor[row + 1][col + 2]) 
-            && (fFloor[row][col + 3] == fFloor[row + 1][col + 3])
+            let setTwoHor = (fFloor[row][col] != fFloor[row][col + 1]) 
+            && (fFloor[row + 1][col] != fFloor[row + 1][col + 1]) 
+            && (fFloor[row][col + 2] != fFloor[row][col + 3]) 
+            && (fFloor[row + 1][col + 2] != fFloor[row + 1][col + 3])
             && (col < cols - 3);
 
             // 4 Column template -->  2 Horizontal and 2 Vertical Bricks
-            let horVertVert = (fFloor[row][col] == fFloor[row][col + 1])
-            && (fFloor[row + 1][col] == fFloor[row + 1][col + 1])
-            && (fFloor[row][col + 2] == fFloor[row + 1][col + 2])
-            && (fFloor[row][col + 3] == fFloor[row + 1][col + 3])
+            let setTwoVertHor = (fFloor[row][col] != fFloor[row + 1][col])
+            && (fFloor[row][col + 1] != fFloor[row + 1][col + 1])
+            && (fFloor[row][col + 2] != fFloor[row][col + 3])
+            && (fFloor[row + 1][col + 2] != fFloor[row + 1][col + 3])
             && (col < cols - 3);
 
             // 4 Column template --> 2 Vertical, 2 Horizontal Bricks
-            let vertVertHor = (fFloor[row][col] == fFloor[row + 1][col])
-            && (fFloor[row][col + 1] == fFloor[row + 1][col + 1])
-            && (fFloor[row][col + 2] == fFloor[row][col + 3])
-            && (fFloor[row + 1][col + 2] == fFloor[row + 1][col + 3])
+            let setHorTwoVert = (fFloor[row][col] != fFloor[row][col + 1])
+            && (fFloor[row + 1][col] != fFloor[row + 1][col + 1])
+            && (fFloor[row][col + 2] != fFloor[row + 1][col + 2])
+            && (fFloor[row][col + 3] != fFloor[row + 1][col + 3])
             && (col < cols - 3);
-    
-            // 3 Column template --> 2 Horizontal and 1 Vertical Brick
-            let horVert = (fFloor[row][col] == fFloor[row][col + 1]) 
-            && (fFloor[row + 1][col] == fFloor[row + 1][col + 1])
-            && (fFloor[row][col + 2] == fFloor[row + 1][col + 2])
-            && (col < cols - 2);
-    
-            // 3 Column template --> 1 Vertical and 2 Horizontal Brick
-            let vertHor = (fFloor[row][col] == fFloor[row + 1][col])
-            && (fFloor[row][col + 1] == fFloor[row][col + 2]) 
-            && (fFloor[row + 1][col + 1] == fFloor[row + 1][col + 2]) 
-            && (col < cols - 2);
-    
-            // 1 Column template --> 1 Vertical Brick
-            let isVertical = (fFloor[row][col] == fFloor[row + 1][col]) 
+
+            // 2 Column template --> 2 Vertical Brick
+            let setTwoHorizontal = (fFloor[row][col] != fFloor[row][col + 1]) 
+            && (fFloor[row + 1][col] != fFloor[row + 1][col + 1])
+            && (col < cols - 1);
+
+            // 2 Column template --> 2 Horizontal Bricks
+            let setTwoVerticals = (fFloor[row][col] != fFloor[row + 1][col]) 
+            && (fFloor[row][col + 1] != fFloor[row + 1][col + 1])
             && (col < cols - 1);
     
-            // 2 Column template --> 2 Horizontal Bricks
-            let isHorizontal = (fFloor[row][col] == fFloor[row][col + 1]) 
-            || ((col == cols - 1) && (fFloor[row][col] != (fFloor[row + 1][col])))
-            || ((fFloor[row][col] != fFloor[row][col + 1]) && (fFloor[row][col] != fFloor[row + 1][col]));
-    
             // Check for available template and execute
-            if (horHorVert) {
-                placeVertical();
+            if (setTwoHor) {
                 placeHorizontal();
                 placeHorizontal();
-            } else if (vertHorHor) {
-                placeHorizontal();
-                placeHorizontal();
-                placeVertical();
-            } else if (vertHorVert) {
-                placeHorizontal();
-                placeHorizontal();
-            } else if (horHor) {
+            } else if (setVertHorVert) {
                 placeVertical();
                 placeHorizontal();
                 placeVertical();
-            } else if (horVertVert) {
+            } else if (setTwoVertHor) {
                 placeVertical();
                 placeVertical();
                 placeHorizontal();
-            } else if (vertVertHor) {
+            } else if (setHorTwoVert) {
                 placeHorizontal();
                 placeVertical();
                 placeVertical();
-            } else if (horVert) {
+            } else if (setTwoVerticals) {
                 placeVertical();
-                placeHorizontal();
-            } else if (vertHor) {
-                placeHorizontal();
                 placeVertical();
-            } else if (isHorizontal) {
-                placeVertical();
-            } else if (isVertical) {
+            } else if (setTwoHorizontal) {
                 placeHorizontal();
             } else {
                 stopIterator--;
@@ -258,7 +223,7 @@ let obj = {
     
         // Printing Result
         if (result) {
-            console.log('No solution exists!');
+            alert('No solution exists!');
             return -1
         } else {
 
@@ -267,10 +232,13 @@ let obj = {
                 let currentRow = `<tr>\n`;
                 for (let col = 0; col < cols; col++) {
                     let sc = Number(sFloorRow[col]);
-                    if (sc < 10) {
-                        sc = '0' + sc;
+                    if (sc < 5) {
+                        sc += 70;
+                    } else if (sc < 10) {
+                        sc += 40;
+                    } else if (sc < 20) {
+                        sc += 50;
                     };
-                    console.log(sc);
                     if (sFloorRow[col] % 5 == 0) {
                         currentRow += `<td><input type="number" style="background-color:#${sc}${sc}14;" value="${sFloorRow[col]}" disabled></td>\n`;
                     } else if (sFloorRow[col] % 4 == 0) {
@@ -286,7 +254,6 @@ let obj = {
                 currentRow += `</tr>\n`;
                 outputTable.insertAdjacentHTML('beforeend', currentRow);
             };
-            sFloor.forEach(x => console.log(x.join(' ')));
         };
     }
 };
@@ -296,12 +263,12 @@ let instructionsText = document.getElementById('instructions');
 let outputTable = document.getElementsByClassName('output-table')[0];
 
 let sizeButton = document.getElementById('btn-input');
-sizeButton.addEventListener('click', obj.validateInput);
+sizeButton.addEventListener('click', fundament.validateInput);
 
 let inputTableResult = inputTable.innerHTML;
 
 let clearTable = document.getElementById('btn-clear-table');
-clearTable.addEventListener('click', obj.clearTbl);
+clearTable.addEventListener('click', fundament.clearTbl);
 
 let enterButton = document.getElementsByClassName('btn')[2];
-enterButton.addEventListener('click', obj.displayResult);
+enterButton.addEventListener('click', fundament.displayResult);

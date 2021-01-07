@@ -14,7 +14,8 @@
     -moz-appearance: textfield;
     }
     body{
-        background-color: cornsilk;
+        background-color: white;
+        color: #23015A;
     }
     h1, h3{
         text-align: center;
@@ -36,13 +37,26 @@
         background-color: black;
         color: white;
     }
-    .btn{
+    button, #height, #width{
         width: max-content;
         height: max-content;
+        border: 1px solid #23015A;
+        border-radius: 5px;
+        padding: 6px 15px;
+        color: #23015A;
+        background-color: white;
     }
     #height, #width{
-        width: 55px;
-        height: 20px;
+        width: 40px;
+        height: 16px;
+    }
+    .result{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #hidden{
+        display: none;
     }
 </style>
 </head>
@@ -70,7 +84,7 @@
             </table>
         </div>
         <div class="result">
-            <button class="btn">Enter Input</button>
+            <button id="hidden" class="btn">Enter Input</button>
             <table>
                 <tbody class="output-table">
                 </tbody>

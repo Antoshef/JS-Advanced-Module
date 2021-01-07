@@ -1,40 +1,37 @@
-function inputCheck(input) {
+function inputCheck(input) { 
     // Validate Width and Height
     let [n, m] = input.shift()
-    .split(' ')
-    .map(Number)
     .filter(x => x <= 100 && x > 0);
     if ((isNaN(n) || isNaN(m)) || (n % 2 == 1 || m % 2 == 1)) {
         console.log('Invalid fundament size!');
         return -1;
     };
-
+ 
     // Validate Floor Size
-    let groundFloor = input.shift();
-    let bricksQty = groundFloor
-    .split(' ')
-    .length;
+    let firstFloor = input;
+    let bricksQty = 0;
+    firstFloor.forEach(x => {
+        bricksQty += x.length;
+    });
     if (bricksQty != n * m) {
         console.log('Bricks exceed floor size');
         return -1;
     };
-    let firstFloor = [];
-    groundFloor = groundFloor.split(' ');
     let bricksUsed = {};
+    let secondFloor = [];
 
     // Building a matrix of the First floor
     for (let i = 0; i < n; i++) {
-        let row = [];
+        secondFloor.push([]);
         for (let o = 0; o < m; o++) {
-            let current = groundFloor.shift()
-            .split('\n')[0];
+            let current = firstFloor[i][o];
+            secondFloor[i].push(0);
 
             // Validating Current Brick
             if (current < 1) {
                 console.log('Error! Invalid Brick');
                 return -1;
             };
-            row.push(current);
 
             // Adding used Brick and Size
             if (bricksUsed[current]) {
@@ -43,7 +40,6 @@ function inputCheck(input) {
                 bricksUsed[current] = 1;
             };
         };
-        firstFloor.push(row);
     };
 
     // Validating Bricks size
@@ -59,58 +55,87 @@ function inputCheck(input) {
     bricks = bricks.map(Number);
     bricks.sort((a, b) => {return 0.5 - Math.random()});
 
-    // Filling Second floor with elements
-    let floor = new Array(n)
-    .fill([]);
-    let secondFloor = [];
-    floor.forEach(row => {
-        let newRow = new Array(m)
-        .fill(0);
-        secondFloor.push(newRow);
-    });
-
     let result = [];
     result.push(firstFloor, secondFloor, bricks, n, m);
     return result;
 };
 
 function buildingSecondFloor(input) {
+    // Take input
     let [fFloor, sFloor, bricks, rows, cols] = input;
     let [row, col] = [0, 0];
     let newBrick = bricks.shift();
-    let stopIterator = 5;
 
-    // Building the second floor
+    // Stop Iterator, if solution can't be found
+    let stopIterator = 3;
+
+    // Create Second Floor
     while (newBrick && stopIterator > 0) {
         if (col >= cols) {
             row += 2;
             col = 0;
         };
 
-        let horVert = (fFloor[row][col] == fFloor[row][col + 1]) 
-        && (fFloor[row][col + 2] == fFloor[row + 1][col + 2])
-        && (col < cols - 2);
+        // Creating pre-made templates solutions
+        // 4 Column template --> 4 Horizontal Bricks
+        let setVertHorVert = (fFloor[row][col] != fFloor[row + 1][col])
+        && (fFloor[row][col + 1] != fFloor[row][col + 2])  
+        && (fFloor[row + 1][col + 1] != fFloor[row + 1][col + 2])
+        && (fFloor[row][col + 3] != fFloor[row + 1][col + 3])
+        && (col < cols - 3);
 
-        let vertHor = (fFloor[row][col] == fFloor[row + 1][col])
-        && (fFloor[row][col + 1] == fFloor[row][col + 2]) 
-        && (col < cols - 2);
+        // 4 Column template --> 1 Vertical, 2 Horizontal and 1 Vertical Bricks
+        let setTwoHor = (fFloor[row][col] != fFloor[row][col + 1]) 
+        && (fFloor[row + 1][col] != fFloor[row + 1][col + 1]) 
+        && (fFloor[row][col + 2] != fFloor[row][col + 3]) 
+        && (fFloor[row + 1][col + 2] != fFloor[row + 1][col + 3])
+        && (col < cols - 3);
 
-        let isVertical = (fFloor[row][col] == fFloor[row + 1][col]) && (col < cols - 1);
+        // 4 Column template -->  2 Horizontal and 2 Vertical Bricks
+        let setTwoVertHor = (fFloor[row][col] != fFloor[row + 1][col])
+        && (fFloor[row][col + 1] != fFloor[row + 1][col + 1])
+        && (fFloor[row][col + 2] != fFloor[row][col + 3])
+        && (fFloor[row + 1][col + 2] != fFloor[row + 1][col + 3])
+        && (col < cols - 3);
 
-        let isHorizontal = (fFloor[row][col] == fFloor[row][col + 1]) 
-        || ((col == cols - 1) && (fFloor[row][col] != (fFloor[row + 1][col])))
-        || ((fFloor[row][col] != fFloor[row][col + 1]) && (fFloor[row][col] != fFloor[row + 1][col]));
+        // 4 Column template --> 2 Vertical, 2 Horizontal Bricks
+        let setHorTwoVert = (fFloor[row][col] != fFloor[row][col + 1])
+        && (fFloor[row + 1][col] != fFloor[row + 1][col + 1])
+        && (fFloor[row][col + 2] != fFloor[row + 1][col + 2])
+        && (fFloor[row][col + 3] != fFloor[row + 1][col + 3])
+        && (col < cols - 3);
 
-        if (horVert) {
+        // 2 Column template --> 2 Vertical Brick
+        let setTwoHorizontal = (fFloor[row][col] != fFloor[row][col + 1]) 
+        && (fFloor[row + 1][col] != fFloor[row + 1][col + 1])
+        && (col < cols - 1);
+
+        // 2 Column template --> 2 Horizontal Bricks
+        let setTwoVerticals = (fFloor[row][col] != fFloor[row + 1][col]) 
+        && (fFloor[row][col + 1] != fFloor[row + 1][col + 1])
+        && (col < cols - 1);
+
+        // Check for available template and execute
+        if (setTwoHor) {
+            placeHorizontal();
+            placeHorizontal();
+        } else if (setVertHorVert) {
             placeVertical();
             placeHorizontal();
-        } else if (vertHor) {
+            placeVertical();
+        } else if (setTwoVertHor) {
+            placeVertical();
+            placeVertical();
+            placeHorizontal();
+        } else if (setHorTwoVert) {
             placeHorizontal();
             placeVertical();
-        } else if (isVertical) {
-            placeHorizontal();
-        } else if (isHorizontal) {
             placeVertical();
+        } else if (setTwoVerticals) {
+            placeVertical();
+            placeVertical();
+        } else if (setTwoHorizontal) {
+            placeHorizontal();
         } else {
             stopIterator--;
         }
@@ -135,7 +160,7 @@ function buildingSecondFloor(input) {
         newBrick = bricks.shift();
     };
 
-    // Validating result
+    // Validating result for empty spaces
     let result = false;
     sFloor.forEach(x => {
         if (x.includes(0)) {
@@ -143,19 +168,35 @@ function buildingSecondFloor(input) {
         };
     });
 
-    if (result) {
+    // Printing Result
+    if (result || stopIterator == 0) {
         console.log('No solution exists!');
         return -1
     } else {
-        sFloor.forEach(x => console.log(x.join(' ')));
+        for (let i = 0; i < sFloor.length; i++) {
+            let currRow = '';
+            let lastBrick = sFloor[i][0];
+            for (let o = 0; o < sFloor[i].length; o++) {
+                let currentBrick = sFloor[i][o];
+                if (currentBrick != lastBrick) {
+                    currRow += '*' + currentBrick;
+                } else {
+                    currRow += currentBrick;
+                };
+                lastBrick = currentBrick;
+            };
+            console.log(currRow);
+        };
     };
 };
 
-let firstFloor = inputCheck(['4 8',
-`9 9 7 7 6 6 11 11
- 16 16 5 5 14 14 3 3
- 1 2 2 8 15 15 4 4
- 1 13 13 8 12 12 10 10`
+let firstFloor = inputCheck([[4, 8],
+    [1, 2, 2, 12, 5, 7, 7, 16],
+    [1, 10, 10, 12, 5, 15, 15, 16],
+    [9, 9, 3, 4, 4, 8, 8, 14],
+    [11, 11, 3, 13, 13, 6, 6, 14],
 ]);
 
-let secondPhase = buildingSecondFloor(firstFloor);
+buildingSecondFloor(firstFloor);
+
+
