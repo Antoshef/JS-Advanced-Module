@@ -107,6 +107,20 @@ function buildingSecondFloor(input) {
         && (fFloor[row][col + 3] == fFloor[row + 1][col + 3])
         && (col < cols - 3);
 
+        // 4 Column template -->  2 Horizontal and 2 Vertical Bricks
+        let horVertVert = (fFloor[row][col] == fFloor[row][col + 1])
+        && (fFloor[row + 1][col] == fFloor[row + 1][col + 1])
+        && (fFloor[row][col + 2] == fFloor[row + 1][col + 2])
+        && (fFloor[row][col + 3] == fFloor[row + 1][col + 3])
+        && (col < cols - 3);
+
+        // 4 Column template --> 2 Vertical, 2 Horizontal Bricks
+        let vertVertHor = (fFloor[row][col] == fFloor[row + 1][col])
+        && (fFloor[row][col + 1] == fFloor[row + 1][col + 1])
+        && (fFloor[row][col + 2] == fFloor[row][col + 3])
+        && (fFloor[row + 1][col + 2] == fFloor[row + 1][col + 3])
+        && (col < cols - 3);
+
         // 3 Column template --> 2 Horizontal and 1 Vertical Brick
         let horVert = (fFloor[row][col] == fFloor[row][col + 1]) 
         && (fFloor[row + 1][col] == fFloor[row + 1][col + 1])
@@ -143,6 +157,14 @@ function buildingSecondFloor(input) {
         } else if (horHor) {
             placeVertical();
             placeHorizontal();
+            placeVertical();
+        } else if (horVertVert) {
+            placeVertical();
+            placeVertical();
+            placeHorizontal();
+        } else if (vertVertHor) {
+            placeHorizontal();
+            placeVertical();
             placeVertical();
         } else if (horVert) {
             placeVertical();
@@ -195,11 +217,11 @@ function buildingSecondFloor(input) {
     };
 };
 
-let firstFloor = inputCheck([[4, 6],
- [12, 13, 13, 15, 15, 18],
- [12, 20, 33, 38, 38, 18],
- [14, 20, 33, 34, 34, 35],
- [14, 36, 36, 37, 37, 35],
+let firstFloor = inputCheck([[4, 8],
+ [15,15,22,22,44,44,85,90],
+ [26,26,89,89,82,82,85,90],
+ [65,64,64,32,55,58,58,70],
+ [65,5,5,32,55,7,7,70],
 ]);
 
 buildingSecondFloor(firstFloor);

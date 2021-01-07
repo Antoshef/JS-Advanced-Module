@@ -1,56 +1,13 @@
-// class Table {
-//     constructor() {
-//         this.inputArray = [];
-//         this.inputTable = '';
-//     }
- 
-//     get inputArrayValue() {
-//         return this.inputArray;
-//     }
-
-//     static validateInput() {
-//         let newInputArray = [];
-//         let tableHeight = document.getElementById('height');
-//         let tableWidth = document.getElementById('width');
-//         inputTable.innerHTML = '';
-
-//         // Validate table width and height
-//         if ((tableHeight.value % 2 == 1 || tableWidth.value % 2 == 1) 
-//         || (tableHeight.value <= 0 || tableWidth.value <= 0)) {
-//             console.log('Invalid fundament size!');
-//             alert('Invalid fundament size!');
-//             return -1;
-//         };
-
-//         for (let row = 0; row < tableHeight.value; row++) {
-//             let currentRow = `<tr>\n`;
-//             newInputArray.push([]);
-//             for (let col = 0; col < tableWidth.value; col++) {
-//                 newInputArray[row].push(0);
-//                 currentRow += `<td><input type="number"></td>\n`;
-//             };
-//             currentRow += `</tr>\n`;
-//             inputTable.insertAdjacentHTML('beforeend', currentRow);
-//         };
-
-//         tableHeight.value = '';
-//         tableWidth.value = '';
-//         topText.style.display = 'none';
-//         this.inputArray = newInputArray;
-//         this.inputTable = inputTable.innerHTML;
-//     };
-// };
-
-// const table = new Table();
 
 let obj = {
     validateInput() {
+        // Take Input
         let newInputArray = [];
         let tableHeight = document.getElementById('height');
         let tableWidth = document.getElementById('width');
         inputTable.innerHTML = '';
     
-        // Validate table width and height
+        // Validate Table Width and Height
         if ((tableHeight.value % 2 == 1 || tableWidth.value % 2 == 1) 
         || (tableHeight.value <= 0 || tableWidth.value <= 0)) {
             console.log('Invalid fundament size!');
@@ -58,6 +15,8 @@ let obj = {
             return -1;
         };
     
+        // Set First Floor Table HTML
+        // Set Second Floor as Empty Array
         for (let row = 0; row < tableHeight.value; row++) {
             let currentRow = `<tr>\n`;
             newInputArray.push([]);
@@ -69,18 +28,23 @@ let obj = {
             inputTable.insertAdjacentHTML('beforeend', currentRow);
         };
 
+        // Add Result to Object
         obj.rows = tableHeight.value;
         obj.cols = tableWidth.value;
         tableHeight.value = '';
         tableWidth.value = '';
-        topText.style.display = 'none';
+        outputTable.innerHTML = '';
+        instructionsText.innerHTML = 'Insert bricks with numbers.<br>Two blocks form one brick.';
         obj.sFloor = newInputArray;
         obj.inputText = inputTable;
     },
 
+    // Clear Button
     clearTbl() {
         inputTable.innerHTML = '';
-        topText.style.display = 'block';
+        instructionsText.innerHTML = 'Set Fundament Width and Height.<br>Each parameter should be even number.'
+        outputTable.innerHTML = '';
+        document.getElementsByTagName('header')[0].style.display = 'block';
     },
 
     displayResult() {
@@ -90,12 +54,28 @@ let obj = {
         let fFloor = [];
         let y = 0;
         let bricksUsed = {};
+        document.getElementsByTagName('header')[0].style.display = 'none';
+
         // Validating input
-        // Check bricks Quantity and Size
         for (let i = 0; i < obj.rows; i++) {
             let currentRow = [];
             for (let o = 0; o < obj.cols; o++) {
                 let currentElement = inputElements[y].value;
+                let cc = Number(currentElement);
+                if (cc < 10) {
+                    cc = '0' + cc;
+                };
+                if (currentElement % 5 == 0) {
+                    inputElements[y].style.backgroundColor = `#${cc}${cc}14`;
+                } else if (currentElement % 4 == 0) {
+                    inputElements[y].style.backgroundColor = `#72${cc}${cc}`;
+                } else if (currentElement % 3 == 0) {
+                    inputElements[y].style.backgroundColor = `#12${cc}${cc}`;
+                } else if (currentElement % 2 == 0) {
+                    inputElements[y].style.backgroundColor = `#${cc}25${cc}`;
+                } else {
+                    inputElements[y].style.backgroundColor = `#${cc}${cc}99`;
+                };
                 y++;
                 currentRow.push(currentElement);
                 if (bricksUsed[currentElement]) {
@@ -106,10 +86,29 @@ let obj = {
             };
             fFloor.push(currentRow);
         };
+
+        // Check Bricks Size
         let bricksQty = Object.values(bricksUsed);
         let filtered = bricksQty.filter(x => x != 2);
         if (filtered.length > 0) {
             alert('Invalid brick size!');
+            return -1;
+        };
+
+        let bricks = Object.keys(bricksUsed);
+        
+        // Validate Bricks input
+        let checkBricks = bricks.filter(x => {
+            return x < 1 || x > 100; 
+        });
+        if (checkBricks.length > 0) {
+            alert('Invalid Bricks used!');
+            return - 1;
+        };
+
+        // Check Bricks Quantity
+        if (bricks.length * 2 != rows * cols) {
+            alert('Bricks exceed floor size');
             return -1;
         };
 
@@ -118,7 +117,6 @@ let obj = {
     
         // Create Second Floor
         let [row, col] = [0, 0];
-        let bricks = Object.keys(bricksUsed);
         let newBrick = bricks.shift();
         while (newBrick && stopIterator > 0) {
             if (col >= cols) {
@@ -155,6 +153,20 @@ let obj = {
             && (fFloor[row][col + 1] == fFloor[row][col + 2]) 
             && (fFloor[row + 1][col + 1] == fFloor[row + 1][col + 2]) 
             && (fFloor[row][col + 3] == fFloor[row + 1][col + 3])
+            && (col < cols - 3);
+
+            // 4 Column template -->  2 Horizontal and 2 Vertical Bricks
+            let horVertVert = (fFloor[row][col] == fFloor[row][col + 1])
+            && (fFloor[row + 1][col] == fFloor[row + 1][col + 1])
+            && (fFloor[row][col + 2] == fFloor[row + 1][col + 2])
+            && (fFloor[row][col + 3] == fFloor[row + 1][col + 3])
+            && (col < cols - 3);
+
+            // 4 Column template --> 2 Vertical, 2 Horizontal Bricks
+            let vertVertHor = (fFloor[row][col] == fFloor[row + 1][col])
+            && (fFloor[row][col + 1] == fFloor[row + 1][col + 1])
+            && (fFloor[row][col + 2] == fFloor[row][col + 3])
+            && (fFloor[row + 1][col + 2] == fFloor[row + 1][col + 3])
             && (col < cols - 3);
     
             // 3 Column template --> 2 Horizontal and 1 Vertical Brick
@@ -193,6 +205,14 @@ let obj = {
             } else if (horHor) {
                 placeVertical();
                 placeHorizontal();
+                placeVertical();
+            } else if (horVertVert) {
+                placeVertical();
+                placeVertical();
+                placeHorizontal();
+            } else if (vertVertHor) {
+                placeHorizontal();
+                placeVertical();
                 placeVertical();
             } else if (horVert) {
                 placeVertical();
@@ -241,12 +261,39 @@ let obj = {
             console.log('No solution exists!');
             return -1
         } else {
+
+            for (let row = 0; row < rows; row++) {
+                let sFloorRow = sFloor[row];
+                let currentRow = `<tr>\n`;
+                for (let col = 0; col < cols; col++) {
+                    let sc = Number(sFloorRow[col]);
+                    if (sc < 10) {
+                        sc = '0' + sc;
+                    };
+                    console.log(sc);
+                    if (sFloorRow[col] % 5 == 0) {
+                        currentRow += `<td><input type="number" style="background-color:#${sc}${sc}14;" value="${sFloorRow[col]}" disabled></td>\n`;
+                    } else if (sFloorRow[col] % 4 == 0) {
+                        currentRow += `<td><input type="number" style="background-color:#72${sc}${sc};" value="${sFloorRow[col]}" disabled></td>\n`;
+                    } else if (sFloorRow[col] % 3 == 0) {
+                        currentRow += `<td><input type="number" style="background-color:#12${sc}${sc};" value="${sFloorRow[col]}" disabled></td>\n`;
+                    } else if (sFloorRow[col] % 2 == 0) {
+                        currentRow += `<td><input type="number" style="background-color:#${sc}25${sc};" value="${sFloorRow[col]}" disabled></td>\n`;
+                    } else {
+                        currentRow += `<td><input type="number" style="background-color:#${sc}${sc}99;" value="${sFloorRow[col]}" disabled></td>\n`;
+                    };
+                };
+                currentRow += `</tr>\n`;
+                outputTable.insertAdjacentHTML('beforeend', currentRow);
+            };
             sFloor.forEach(x => console.log(x.join(' ')));
         };
     }
 };
 let inputTable = document.getElementsByClassName('input-table')[0];
 let topText = document.getElementsByTagName('header')[0];
+let instructionsText = document.getElementById('instructions');
+let outputTable = document.getElementsByClassName('output-table')[0];
 
 let sizeButton = document.getElementById('btn-input');
 sizeButton.addEventListener('click', obj.validateInput);
@@ -258,175 +305,3 @@ clearTable.addEventListener('click', obj.clearTbl);
 
 let enterButton = document.getElementsByClassName('btn')[2];
 enterButton.addEventListener('click', obj.displayResult);
-
-// function validateInput() {
-//     let newInputArray = [];
-//     let tableHeight = document.getElementById('height');
-//     let tableWidth = document.getElementById('width');
-//     inputTable.innerHTML = '';
-
-//     // Validate table width and height
-//     if ((tableHeight.value % 2 == 1 || tableWidth.value % 2 == 1) 
-//     || (tableHeight.value <= 0 || tableWidth.value <= 0)) {
-//         console.log('Invalid fundament size!');
-//         alert('Invalid fundament size!');
-//         return -1;
-//     };
-
-//     for (let row = 0; row < tableHeight.value; row++) {
-//         let currentRow = `<tr>\n`;
-//         newInputArray.push([]);
-//         for (let col = 0; col < tableWidth.value; col++) {
-//             newInputArray[row].push(0);
-//             currentRow += `<td><input type="number"></td>\n`;
-//         };
-//         currentRow += `</tr>\n`;
-//         inputTable.insertAdjacentHTML('beforeend', currentRow);
-//     };
-
-//     tableHeight.value = '';
-//     tableWidth.value = '';
-//     topText.style.display = 'none';
-//     obj.inputArray = newInputArray;
-// };
-
-// function clearTbl() {
-//     inputTable.innerHTML = '';
-//     topText.style.display = 'block';
-//     console.log(obj);
-// };
-
-// function displayResult() {
-//     // Take input
-//     let [fFloor, sFloor, bricks, rows, cols] = input;
-//     let [row, col] = [0, 0];
-//     let newBrick = bricks.shift();
-
-//     // Stop Iterator, if solution can't be found
-//     let stopIterator = 5;
-
-//     // Create Second Floor
-//     while (newBrick && stopIterator > 0) {
-//         if (col >= cols) {
-//             row += 2;
-//             col = 0;
-//         };
-
-//         // Creating pre-made templates solutions
-//         // 5 Column template --> 1 Vertical and 4 Horizontal Bricks
-//         let vertHorHor = (fFloor[row][col] == fFloor[row + 1][col])
-//         && (fFloor[row][col + 1] == fFloor[row][col + 2])
-//         && (fFloor[row + 1][col + 1] == fFloor[row + 1][col + 2])
-//         && (fFloor[row][col + 3] == fFloor[row][col + 4])
-//         && (fFloor[row + 1][col + 3] == fFloor[row + 1][col + 4])
-//         && (col < cols - 4);
-
-//         // 5 Column template --> 4 Horizontal and 1 Vertical Brick
-//         let horHorVert = (fFloor[row][col] == fFloor[row][col + 1])
-//         && (fFloor[row + 1][col] == fFloor[row + 1][col + 1]) 
-//         && (fFloor[row][col + 2] == fFloor[row][col + 3])
-//         && (fFloor[row + 1][col + 2] == fFloor[row + 1][col + 3])
-//         && (fFloor[row][col + 4] == fFloor[row + 1][col + 4])
-//         && (col < cols - 4);
-
-//         // 4 Column template --> 4 Horizontal Bricks
-//         let horHor = (fFloor[row][col] == fFloor[row][col + 1])
-//         && (fFloor[row + 1][col] == fFloor[row + 1][col + 1])  
-//         && (fFloor[row][col + 2] == fFloor[row][col + 3])
-//         && (fFloor[row + 1][col + 2] == fFloor[row + 1][col + 3])
-//         && (col < cols - 3);
-
-//         // 4 Column template --> 1 Vertical, 2 Horizontal and 1 Vertical Bricks
-//         let vertHorVert = (fFloor[row][col] == fFloor[row + 1][col]) 
-//         && (fFloor[row][col + 1] == fFloor[row][col + 2]) 
-//         && (fFloor[row + 1][col + 1] == fFloor[row + 1][col + 2]) 
-//         && (fFloor[row][col + 3] == fFloor[row + 1][col + 3])
-//         && (col < cols - 3);
-
-//         // 3 Column template --> 2 Horizontal and 1 Vertical Brick
-//         let horVert = (fFloor[row][col] == fFloor[row][col + 1]) 
-//         && (fFloor[row + 1][col] == fFloor[row + 1][col + 1])
-//         && (fFloor[row][col + 2] == fFloor[row + 1][col + 2])
-//         && (col < cols - 2);
-
-//         // 3 Column template --> 1 Vertical and 2 Horizontal Brick
-//         let vertHor = (fFloor[row][col] == fFloor[row + 1][col])
-//         && (fFloor[row][col + 1] == fFloor[row][col + 2]) 
-//         && (fFloor[row + 1][col + 1] == fFloor[row + 1][col + 2]) 
-//         && (col < cols - 2);
-
-//         // 1 Column template --> 1 Vertical Brick
-//         let isVertical = (fFloor[row][col] == fFloor[row + 1][col]) 
-//         && (col < cols - 1);
-
-//         // 2 Column template --> 2 Horizontal Bricks
-//         let isHorizontal = (fFloor[row][col] == fFloor[row][col + 1]) 
-//         || ((col == cols - 1) && (fFloor[row][col] != (fFloor[row + 1][col])))
-//         || ((fFloor[row][col] != fFloor[row][col + 1]) && (fFloor[row][col] != fFloor[row + 1][col]));
-
-//         // Check for available template and execute
-//         if (horHorVert) {
-//             placeVertical();
-//             placeHorizontal();
-//             placeHorizontal();
-//         } else if (vertHorHor) {
-//             placeHorizontal();
-//             placeHorizontal();
-//             placeVertical();
-//         } else if (vertHorVert) {
-//             placeHorizontal();
-//             placeHorizontal();
-//         } else if (horHor) {
-//             placeVertical();
-//             placeHorizontal();
-//             placeVertical();
-//         } else if (horVert) {
-//             placeVertical();
-//             placeHorizontal();
-//         } else if (vertHor) {
-//             placeHorizontal();
-//             placeVertical();
-//         } else if (isHorizontal) {
-//             placeVertical();
-//         } else if (isVertical) {
-//             placeHorizontal();
-//         } else {
-//             stopIterator--;
-//         }
-//     };
-
-//     // Create two Horizontal Bricks on two rows
-//     function placeHorizontal() {
-//         sFloor[row][col] = newBrick;
-//         sFloor[row][col + 1] = newBrick;
-//         newBrick = bricks.shift();
-//         sFloor[row + 1][col] = newBrick;
-//         sFloor[row + 1][col + 1] = newBrick;
-//         newBrick = bricks.shift();
-//         col += 2;
-//     };
-
-//     // Create one Vertical Brick on current column
-//     function placeVertical() {
-//         sFloor[row][col] = newBrick;
-//         sFloor[row + 1][col] = newBrick;
-//         col++;
-//         newBrick = bricks.shift();
-//     };
-
-//     // Validating result for empty spaces
-//     let result = false;
-//     sFloor.forEach(x => {
-//         if (x.includes(0)) {
-//             result = true;
-//         };
-//     });
-
-//     // Printing Result
-//     if (result) {
-//         console.log('No solution exists!');
-//         return -1
-//     } else {
-//         sFloor.forEach(x => console.log(x.join(' ')));
-//     };
-// }
