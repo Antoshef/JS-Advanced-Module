@@ -68,29 +68,58 @@ let obj = {
             currentRow += `</tr>\n`;
             inputTable.insertAdjacentHTML('beforeend', currentRow);
         };
-    
+
+        obj.rows = tableHeight.value;
+        obj.cols = tableWidth.value;
         tableHeight.value = '';
         tableWidth.value = '';
         topText.style.display = 'none';
-        obj.inputArray = newInputArray;
+        obj.sFloor = newInputArray;
+        obj.inputText = inputTable;
     },
 
     clearTbl() {
         inputTable.innerHTML = '';
         topText.style.display = 'block';
-        console.log(obj);
     },
 
     displayResult() {
         // Take input
-        let [fFloor, sFloor, bricks, rows, cols] = input;
-        let [row, col] = [0, 0];
-        let newBrick = bricks.shift();
-    
+        let [text, sFloor, rows, cols] = [obj.inputText, obj.sFloor, obj.rows, obj.cols];
+        let inputElements = text.querySelectorAll('input');
+        let fFloor = [];
+        let y = 0;
+        let bricksUsed = {};
+        // Validating input
+        // Check bricks Quantity and Size
+        for (let i = 0; i < obj.rows; i++) {
+            let currentRow = [];
+            for (let o = 0; o < obj.cols; o++) {
+                let currentElement = inputElements[y].value;
+                y++;
+                currentRow.push(currentElement);
+                if (bricksUsed[currentElement]) {
+                    bricksUsed[currentElement] += 1;
+                } else {
+                    bricksUsed[currentElement] = 1;
+                };
+            };
+            fFloor.push(currentRow);
+        };
+        let bricksQty = Object.values(bricksUsed);
+        let filtered = bricksQty.filter(x => x != 2);
+        if (filtered.length > 0) {
+            alert('Invalid brick size!');
+            return -1;
+        };
+
         // Stop Iterator, if solution can't be found
         let stopIterator = 5;
     
         // Create Second Floor
+        let [row, col] = [0, 0];
+        let bricks = Object.keys(bricksUsed);
+        let newBrick = bricks.shift();
         while (newBrick && stopIterator > 0) {
             if (col >= cols) {
                 row += 2;
