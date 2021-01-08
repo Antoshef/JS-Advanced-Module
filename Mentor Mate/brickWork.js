@@ -44,8 +44,8 @@ function inputCheck(input) {
 
     // Validating Bricks size
     let bricksSize = Object.values(bricksUsed);
-    let falseSize = bricksSize.filter(x => x != 2);
-    if (falseSize.length > 0) {
+    let falseSize = bricksSize.every(x => x == 2);
+    if (!falseSize) {
         console.log('Error! Ivalid brick sizes');
         return -1;
     };
@@ -190,11 +190,11 @@ function buildingSecondFloor(input) {
     };
 };
 
-let firstFloor = inputCheck([[4, 10],
-    [20,22,15,15,14,19,26,25,25,23],
-    [20,22,10,10,14,19,26,28,28,23],
-    [44,40,40,42,42,45,60,62,61,69],
-    [44,55,55,59,59,45,60,62,61,69]
+let firstFloor = inputCheck([[4, 8],
+    [20,22,15,15,14,19,26,25],
+    [20,22,10,10,14,19,26,25],
+    [44,40,40,42,42,45,60,62],
+    [44,55,55,59,59,45,60,62]
 ]);
 
 buildingSecondFloor(firstFloor);

@@ -213,15 +213,28 @@ function buildingSecondFloor(input) {
         console.log('No solution exists!');
         return -1
     } else {
-        sFloor.forEach(x => console.log(x.join(' ')));
+        for (let i = 0; i < sFloor.length; i++) {
+            let currRow = '';
+            let lastBrick = sFloor[i][0];
+            for (let o = 0; o < sFloor[i].length; o++) {
+                let currentBrick = sFloor[i][o];
+                if (currentBrick != lastBrick) {
+                    currRow += '*' + currentBrick;
+                } else {
+                    currRow += currentBrick;
+                };
+                lastBrick = currentBrick;
+            };
+            console.log(currRow);
+        };
     };
 };
 
-let firstFloor = inputCheck([[4, 10],
- [1,1,10,10,15,19,22,22,23,28],
- [34,34,30,30,15,19,29,29,23,28],
- [45,46,49,49,50,51,55,89,64,64],
- [45,46,70,70,50,51,55,89,68,68],
+let firstFloor = inputCheck([[4, 8],
+ [1,1,10,10,15,19,22,22],
+ [34,34,30,30,15,19,29,29],
+ [45,46,49,49,50,51,55,89],
+ [45,46,70,70,50,51,55,89],
 ]);
 
 buildingSecondFloor(firstFloor);
