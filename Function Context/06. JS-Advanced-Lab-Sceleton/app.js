@@ -1,5 +1,7 @@
 function solve() {
-
+ 
+    let ul = document.querySelector('#dropdown-ul');
+    ul.style.display == 'none';
     document.querySelector('#dropdown')
     .addEventListener('click', showMenu);
     let liElements = [...document.querySelectorAll('ul > li')];
@@ -10,10 +12,10 @@ function solve() {
     }));
 
     function showMenu() {
-    let ul = document.querySelector('#dropdown-ul');
         if (ul.style.display == 'none') {
             ul.style.display = 'block';
-        } else {
+        }
+        else {
             ul.style.display = 'none';
             document.getElementById('box').style.backgroundColor = 'rgb(114, 112, 112)';
         };
