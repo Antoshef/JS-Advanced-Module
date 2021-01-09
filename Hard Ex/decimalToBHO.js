@@ -19,6 +19,6 @@ return("Wrong input.........");
 }  
 }
 
-console.log(dec_to_bho(1,'B'));
-console.log(dec_to_bho(1,'H'));
-console.log(dec_to_bho(1,'O'));
+console.log(dec_to_bho(10,'B'));
+console.log(dec_to_bho(10,'H'));
+console.log(dec_to_bho(10,'O'));
