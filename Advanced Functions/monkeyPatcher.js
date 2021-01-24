@@ -4,8 +4,6 @@ var forumPost = {
     content: 'hi guys',
     upvotes: 0,
     downvotes: 0
-
-    
 };
 
 function solve() {
