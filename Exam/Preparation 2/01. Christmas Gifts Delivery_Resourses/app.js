@@ -2,7 +2,7 @@ function solution() {
     
     let addGiftsBtn = document.getElementsByClassName('card')[0].getElementsByTagName('button')[0];
     let inputField = document.getElementsByClassName('card')[0].getElementsByTagName('input')[0];
-    let list = document.getElementsByClassName('card')[1];
+    let list = document.getElementsByClassName('card')[1].getElementsByTagName('ul')[0];
     let sent = document.getElementsByClassName('card')[2].getElementsByTagName('ul')[0];
     let discarded = document.getElementsByClassName('card')[3].getElementsByTagName('ul')[0];
 
@@ -34,17 +34,13 @@ function solution() {
                 let item = current.parentElement;
                 let buttons = item.getElementsByTagName('button');
                 if (current.innerHTML == 'Send') {
-                    item.removeChild(buttons[0]);
+                    item.removeChild(buttons[1]);
                     item.removeChild(buttons[0]);
                     sent.appendChild(item);
-                    sorting(sent);
-                    console.log(sent);
                 } else {
-                    item.removeChild(buttons[0]);
+                    item.removeChild(buttons[1]);
                     item.removeChild(buttons[0]);
                     discarded.appendChild(item);
-                    sorting(discarded);
-                    console.log(discarded);
                 }
             })
         }

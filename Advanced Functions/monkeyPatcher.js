@@ -4,19 +4,21 @@ var forumPost = {
     content: 'hi guys',
     upvotes: 0,
     downvotes: 0
+
+    
 };
 
-solve = () => {
+function solve() {
     const commands = {
-        upvote: (post) => {
+        upvote(post) {
             post.upvotes++;
         },
 
-        downvote: (post) => {
+        downvote(post) {
             post.downvotes++;
         },
     
-        score: (post) => {
+        score(post) {
             let {upvotes, downvotes} = post;
             let total = upvotes + downvotes;
             let balance = upvotes - downvotes;
@@ -42,7 +44,7 @@ solve = () => {
         }
     };
 
-    return (command) => commands[command](forumPost);
+    return (command) => solve(commands[command](input));
 };
 
 let solution = solve();
