@@ -23,10 +23,9 @@ function solve(input) {
         },
         wheels: [],
     };
-
-    input.wheelsize % 2 === 0
-    ? result.wheels = [input.wheelsize -= 1,input.wheelsize,input.wheelsize,input.wheelsize]
-    : result.wheels = [input.wheelsize,input.wheelsize,input.wheelsize,input.wheelsize]
+    let size = input.wheelsize
+    size % 2 === 0 ? size-- : size
+    result.wheels = [size, size, size, size];
 
     for (let x in engines) {
         if (engines[x].power >= input.power) {
