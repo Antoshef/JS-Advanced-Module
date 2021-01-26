@@ -7,7 +7,7 @@ function solve() {
     let openTask = document.getElementsByTagName('section')[1];
     let openDiv = openTask.getElementsByTagName('div')[1];
 
-    addBtn.onclick = function addTask() {
+    return addBtn.onclick = function addTask() {
         let isValid = false;
         if (taskText.value.length > 0 && descriptionText.value.length > 0  && dateText.value.length > 0 ) {
             isValid = true;
@@ -36,7 +36,5 @@ function solve() {
         }
         
     }
-
-    return addTask();
 
 }
