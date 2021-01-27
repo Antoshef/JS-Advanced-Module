@@ -13,7 +13,8 @@ function solveClasses() {
     class ShortReports extends Article {
         constructor(title, content, originalResearch) {
             super(title, content),
-            this.origitnalResearches = originalResearch
+            this.origitnalResearches = originalResearch,
+            this.comments = []
 
             if (content.length >= 150) {
                 return "Short reports content should be less then 150 symbols."
@@ -22,7 +23,8 @@ function solveClasses() {
             }
         }
         addComment = function(text) {
-            return this.comments = text
+            this.comments.push(text);
+            return "The comment is added."
         }
 
         // toString = Article.toString
