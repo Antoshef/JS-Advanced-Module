@@ -28,7 +28,7 @@ function solveClasses() {
         }
 
         toString = function() {
-            let result = `Title: ${this.title}\nContent: ${this.content}\n`;
+            let result = `Title: ${this.title}\nContent: ${this.content}`;
             result += `\nOriginal Research: ${this.origitnalResearches.title} by ${this.origitnalResearches.author}`;
             if (this.comments.length > 0) {
                 this.comments.forEach(x => {
