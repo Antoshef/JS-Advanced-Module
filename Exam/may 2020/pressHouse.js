@@ -17,9 +17,9 @@ function solveClasses() {
             this.comments = []
 
             if (content.length >= 150) {
-                return "Short reports content should be less then 150 symbols."
-            } else if (!title || !content){
-                return "The original research should have author and title."
+                throw Error("Short reports content should be less then 150 symbols.")
+            } else if (!this.origitnalResearches.title || !this.origitnalResearches.author){
+                throw Error ("The original research should have author and title.")
             }
         }
         addComment = function(text) {
@@ -29,10 +29,10 @@ function solveClasses() {
 
         toString = function() {
             let result = `Title: ${this.title}\nContent: ${this.content}\n`;
-            result += `Original Research: ${this.origitnalResearches.title} by ${this.origitnalResearches.author}\n`;
+            result += `\nOriginal Research: ${this.origitnalResearches.title} by ${this.origitnalResearches.author}`;
             if (this.comments.length > 0) {
                 this.comments.forEach(x => {
-                    result += x + '\n';
+                    result += '\n' + x ;
                 });
             };
             return result
@@ -48,12 +48,22 @@ function solveClasses() {
         addClient = function(clientName, orderDescription) {
             let validate = this.clients.some(x => x.clientName == clientName);
             if (!validate) {
-                this.clients.push({clientName: orderDescription});
+                this.clients.push({clientName, orderDescription});
                 return `${clientName} has ordered a review for ${this.book.name}`;
             } else {
-                return "This client has already ordered this review.";
+                throw Error("This client has already ordered this review.");
             }
-
+        }
+        toString = function() {
+            let result = `Title: ${this.title}\nContent: ${this.content}`;
+            result += `\nBook: ${this.book.name}`;
+            if (this.clients.length > 0) {
+                result += '\nOrders:'
+                this.clients.forEach(x => {
+                    result += `\n${x.clientName} - ${x.orderDescription}`
+                });
+            }
+            return result
         }
     }
 
@@ -68,7 +78,8 @@ let classes = solveClasses();
 let lorem = new classes.Article("Lorem", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non tortor finibus, facilisis mauris vel…");
 console.log(lorem.toString()); 
 
-let short = new classes.ShortReports("SpaceX and Javascript", "Yes, its damn true.SpaceX in its recent launch Dragon 2 Flight has used a technology based on Chromium and Javascript. What are your views on this ?", { title: "Dragon 2", author: "wikipedia.org" });
+let longContent = 'Yes, its damn true.SpaceX in its recent launch Dragon 2 Flight has used a technology based on Chromium and Javascript. What are your views on this ?'
+let short = new classes.ShortReports("SpaceX and Javascript", longContent, { title: "Dragon 2", author: "wikipedia.org" });
 console.log(short.addComment("Thank god they didn't use java."))
 short.addComment("In the end JavaScript\"s features are executed in C++ — the underlying language.")
 console.log(short.toString()); 
