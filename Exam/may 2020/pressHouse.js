@@ -27,20 +27,29 @@ function solveClasses() {
             return "The comment is added."
         }
 
-        // toString = Article.toString
+        toString = function() {
+            let result = `Title: ${this.title}\nContent: ${this.content}\n`;
+            result += `Original Research: ${this.origitnalResearches.title} by ${this.origitnalResearches.author}\n`;
+            if (this.comments.length > 0) {
+                this.comments.forEach(x => {
+                    result += x + '\n';
+                });
+            };
+            return result
+        }
     }
 
     class BookReview extends Article {
         constructor(title, content, book) {
             super(title, content),
             this.book = book,
-            this.client = []
+            this.clients = []
         }
         addClient = function(clientName, orderDescription) {
-            let validate = this.client.some(x => x.clientName == clientName);
+            let validate = this.clients.some(x => x.clientName == clientName);
             if (!validate) {
-                this.client.push({clientName: orderDescription});
-                return `${clientName} has ordered a review for ${this.book}`;
+                this.clients.push({clientName: orderDescription});
+                return `${clientName} has ordered a review for ${this.book.name}`;
             } else {
                 return "This client has already ordered this review.";
             }
