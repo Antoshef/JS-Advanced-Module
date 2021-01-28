@@ -10,7 +10,7 @@ class Bank {
         if (bank.validation(personalId)) {
             throw Error(`${firstName} ${lastName} is already our customer!`)
         } else {
-            this.allCustomers.push({firstName, lastName, personalId});
+            this.allCustomers.push({firstName, lastName, personalId, transactions: []});
             return {firstName, lastName, personalId}
         }
     }
@@ -21,6 +21,7 @@ class Bank {
                 result.totalMoney = 0;
             }
             result.totalMoney += amount;
+            result.transactions.unshift(`${result.firstName} ${result.lastName} made deposit of ${amount}$!`);
             return result.totalMoney + '$';
         } else {
             throw Error('We have no customer with this ID!');
@@ -28,9 +29,29 @@ class Bank {
     }
     withdrawMoney = function(personalId, amount) {
         if (bank.validation(personalId)) {
+            let result = this.allCustomers.find(x => x.personalId === personalId);
+            result.transactions.unshift(`${result.firstName} ${result.lastName} withdrew ${amount}$!`);
             return bank.moneyCheck(personalId, amount);
         } else {
             throw Error('We have no customer with this ID!');
+        }
+    }
+    customerInfo = function(personalId) {
+        if (!bank.validation(personalId)) {
+            throw Error('We have no customer with this ID!');
+        } else {
+            let result = `Bank name: ${bank.#bankName}`;
+            let customer = this.allCustomers.find(x => x.personalId === personalId);
+            result += `\nCustomer name: ${customer.firstName} ${customer.lastName}`;
+            result += `\nCustomer ID: ${customer.personalId}`;
+            result += `\nTotal Money: ${customer.totalMoney}$`;
+            result += `\nTransactions:`;
+            let index = customer.transactions.length;
+            customer.transactions.forEach(x => {
+                result += '\n' + index + '. ' + x;
+                index--;
+            });
+            return result
         }
     }
 
@@ -47,6 +68,7 @@ class Bank {
             return result.totalMoney + '$';
         }
     }
+    
 }
 
 let bank = new Bank("SoftUni Bank");
