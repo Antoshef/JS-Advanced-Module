@@ -16,15 +16,36 @@ class Bank {
     }
     depositMoney = function(personalId, amount) {
         if (bank.validation(personalId)) {
-            throw Error('We have no customer with this ID!');
+            let result = this.allCustomers.find(x => x.personalId == personalId);
+            if (!result.hasOwnProperty('totalMoney')) {
+                result.totalMoney = 0;
+            }
+            result.totalMoney += amount;
+            return result.totalMoney + '$';
         } else {
-            let result = this.allCustomers.find(personalId);
-            console.log(result);
+            throw Error('We have no customer with this ID!');
+        }
+    }
+    withdrawMoney = function(personalId, amount) {
+        if (bank.validation(personalId)) {
+            return bank.moneyCheck(personalId, amount);
+        } else {
+            throw Error('We have no customer with this ID!');
         }
     }
 
     validation = function(personalId) {
         return this.allCustomers.some(x => x.personalId === personalId);
+    }
+    
+    moneyCheck = function(personalId, amount) {
+        let result = this.allCustomers.find(x => x.personalId === personalId);
+        if (result.totalMoney < amount) {
+            throw Error(`${result.firstName} ${result.lastName} does not have enough money to withdraw that amount!`);
+        } else {
+            result.totalMoney -= amount;
+            return result.totalMoney + '$';
+        }
     }
 }
 
