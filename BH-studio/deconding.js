@@ -54,9 +54,12 @@ function decoding(input) {
 
 decoding(
     [
-        'mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X',
-        'mem[8] = 11',
-        'mem[7] = 101',
-        'mem[8] = 0'
+        'mask = X0000X00X11010X011011010X11X000000X1',
+        'mem[46536] = 230918555',
+        'mem[45646] = 293515330',
+        'mem[34129] = 72857965',
+        'mem[28342] = 3005',
+        'mem[1998] = 12034321',
+        'mem[9738] = 10515'
     ]
 )
