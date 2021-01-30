@@ -27,25 +27,25 @@ function decoding(input) {
     }
 
     // Masking each Element
-    function maskElements(mask, current) {
+    function maskElements(mask, currentBinary) {
         let splitMask = mask.split('');
-        current = current.split('');
+        currentBinary = currentBinary.split('');
         for (let i = 0; i < 36; i++) {
             if (splitMask[i] !== 'X') {
-                current[i] = splitMask[i];
+                currentBinary[i] = splitMask[i];
             }
         }
-        current = current.join('');
+        currentBinary = currentBinary.join('');
 
         // Convert Binary to Decimal
-        return parseInt(current, 2);
+        return parseInt(currentBinary, 2);
     }
 
     // Convert Decimal to Binary
     function toBinary(n) {
-        let bit = parseInt(n, 10).toString(2);
-        let fill = '0'.repeat((36 - bit.length));
-        return fill.concat(bit);
+        let binary = parseInt(n, 10).toString(2);
+        let fill = '0'.repeat((36 - binary.length));
+        return fill.concat(binary);
     }
 
     // Printing Result
