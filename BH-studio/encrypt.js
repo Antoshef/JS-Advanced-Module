@@ -6,6 +6,7 @@ function dockingSoftware(input) {
     let recievedMessages = [];
     let programResult = 0;
 
+    // Creating Class to Store Messages and Methods
     class Message {
         constructor(mask) {
             this.mask = mask;
@@ -25,7 +26,7 @@ function dockingSoftware(input) {
         }
 
         // Transform Binary input using Mask
-        setMask(mask, current) {
+        applyMask(mask, current) {
             let splitMask = mask.split('');
             current = current.split('');
             for (let i = 0; i < 36; i++) {
@@ -54,29 +55,31 @@ function dockingSoftware(input) {
                 binary: currentMessage.toBinary(parseInt(entry)),
                 output: 0,
             };
-        }
+        };
     });
     
     // Interate through each Recieved Message
-    for (let key of recievedMessages) {
+    for (let dockingParameters of recievedMessages) {
         let currentMessageResult = 0;
-        for (let each in key.code) {
-            let currentMask = key.mask;
-            let currentOutput = key.code[each].output
-            let currentBinary = key.code[each].binary;
-            currentOutput = currentMessage.setMask(currentMask, currentBinary);
+        let currentMask = dockingParameters.mask;
+        for (let singleMemoryCode in dockingParameters.code) {
+            let currentOutput = dockingParameters.code[singleMemoryCode].output
+            let currentBinary = dockingParameters.code[singleMemoryCode].binary;
+
+            // Applying Mask to each Message Recieved
+            currentOutput = currentMessage.applyMask(currentMask, currentBinary);
             currentMessageResult += currentOutput;
         }
-        console.log(currentMessageResult);
+        // Apply each Message Result to Final Result
         programResult += currentMessageResult;
-    }
+    };
 
     // Printing Result
     console.log(programResult);
-}
+};
 
 dockingSoftware(
-    `mask = XXX010X00X00X010X0X10111001XX00101X0
+    `mask = XXX0X0X00X00X0X0X0XX0XXX001XX00101X0
     mem[26794] = 326029
     mem[26794] = 3479
     mem[26794] = 5229418
@@ -87,10 +90,10 @@ dockingSoftware(
     mem[22801] = 63583
     mem[15888] = 309486967
     mem[16644] = 1751
-    mask = X0000X00X11010X011011010X11X000000X1
+    mask = X0000X00XXX010X011011010X11X000000X1
     mem[46536] = 230918555
     mem[45646] = 293515330
-    mem[34129] = 72857965
+    mem[46536] = 72857965
     mem[28342] = 3005
     mem[1998] = 12034321
     mem[9738] = 10515`
