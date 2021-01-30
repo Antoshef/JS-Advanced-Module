@@ -1,11 +1,10 @@
-function decoding(input) {
+function dockingSoftware(input) {
 
     // Recieve Docking Parameters
-    let parameters = input
-    .trim()
+    let inputParameters = input
     .split('\n');
-    let messages = [];
-    let result = 0;
+    let recievedMessages = [];
+    let programResult = 0;
 
     class Message {
         constructor(mask) {
@@ -13,17 +12,20 @@ function decoding(input) {
             this.code = {}
         }
 
+        // Convert Decimal to Binary
         toBinary(n) {
-            let bit = parseInt(n, 10).toString(2);
-            let fill = '0'.repeat((36 - bit.length));
-            return fill.concat(bit);
+            let binary = parseInt(n, 10).toString(2);
+            let fill = '0'.repeat((36 - binary.length));
+            return fill.concat(binary);
         }
 
+        // Convert Binary to Decimal
         toDecimal(current) {
             return parseInt(current, 2);
         }
 
-        maskElements(mask, current) {
+        // Transform Binary input using Mask
+        setMask(mask, current) {
             let splitMask = mask.split('');
             current = current.split('');
             for (let i = 0; i < 36; i++) {
@@ -36,14 +38,15 @@ function decoding(input) {
         }
     };
 
+    // Read Current Message
     let currentMessage;
-    parameters.forEach(line => {
-        let [log, entry] = line.split(' = ');
-        if (log.includes('mask')) {
+    inputParameters.forEach(line => {
+        let [command, entry] = line.split(' = ');
+        if (command.includes('mask')) {
             currentMessage = new Message(entry);
-            messages.push(currentMessage);
+            recievedMessages.push(currentMessage);
         } else {
-            memory = log
+            memory = command
             .match(/[\d+]/g)
             .join('');
             currentMessage.code[memory] = {
@@ -53,26 +56,26 @@ function decoding(input) {
             };
         }
     });
-    // Store Data
     
-    for (let key of messages) {
+    // Interate through each Recieved Message
+    for (let key of recievedMessages) {
         let currentMessageResult = 0;
         for (let each in key.code) {
             let currentMask = key.mask;
             let currentOutput = key.code[each].output
             let currentBinary = key.code[each].binary;
-            currentOutput = currentMessage.maskElements(currentMask, currentBinary);
+            currentOutput = currentMessage.setMask(currentMask, currentBinary);
             currentMessageResult += currentOutput;
         }
         console.log(currentMessageResult);
-        result += currentMessageResult;
+        programResult += currentMessageResult;
     }
 
     // Printing Result
-    console.log(result);
+    console.log(programResult);
 }
 
-decoding(
+dockingSoftware(
     `mask = XXX010X00X00X010X0X10111001XX00101X0
     mem[26794] = 326029
     mem[26794] = 3479
