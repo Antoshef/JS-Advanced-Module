@@ -1,8 +1,7 @@
 function dockingSoftware(input) {
 
     // Recieve Docking Parameters
-    let inputParameters = input
-    .split('\n');
+    let inputParameters = input.split('\n');
     let recievedMessages = [];
     let programResult = 0;
 

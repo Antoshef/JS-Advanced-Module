@@ -8,7 +8,7 @@ function decoding(input) {
     let result = 0;
 
     // Store Data
-    input.forEach(line => {
+    input.map(line => {
         let [memory, entry] = line.split(' = ');
         memory = memory
         .match(/[\d+]/g)
