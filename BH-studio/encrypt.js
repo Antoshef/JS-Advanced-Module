@@ -1,5 +1,6 @@
 // Creating Class to Store Messages and Methods
 let commands = {
+    // Split and Sort Input Messages
     splitMessages(input) {
         let inputParameters = input.split('\n');
         let result = [];
@@ -18,6 +19,7 @@ let commands = {
         return result;
     },
 
+    // Read Current Message
     readMessage(inputParameters) {
         let code = {};
         inputParameters.map(x => {
@@ -60,26 +62,45 @@ let commands = {
         binary = binary.join('');
         return this.toDecimal(binary);
     },
+    
+    // Sum Each line of Code
+    sumCodeOutputs(input) {
+        let sum = Object.values(input).reduce(((acc, x) => acc + x.output), 0);
+        return sum;
+    }
 };
 
 function dockingSoftware(input) {
     // Recieve Docking Parameters
-    let recievedMessages = [];
-    let programResult = 0;
-
     let allMessages = commands.splitMessages(input);
 
     // Read Current Message
     let currentMessage = commands.readMessage(allMessages);
-    recievedMessages.push(currentMessage);
+    let programResult = commands.sumCodeOutputs(currentMessage);
+    return programResult;
 };
 
 dockingSoftware(
-    `mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
-    mem[8] = 11
-    mem[7] = 101
-    mem[8] = 0
-    mask = 00X01010000010101X010X01X100010011X0
-    mem[23911] = 21827
-    mem[37956] = 3727083`
+    `'mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X',
+    'mem[8] = 11',
+    'mem[7] = 101',
+    'mem[8] = 0'
+    'mask = 0010X0X100X011101X010X001110X00X1101',
+    'mem[46114] = 15140',
+    'mem[38354] = 6246405',
+    'mem[3227] = 1976',
+    'mem[46579] = 414875',
+    'mem[20140] = 185761241'
+    'mask = 0X00100000X0X01001X001111X101011X110',
+    'mem[11688] = 122943295',
+    'mem[54669] = 820167',
+    'mem[1156] = 12904',
+    'mem[36883] = 436481745',
+    'mem[49687] = 12497'
+    'mask = 000XX01000X01010100100X000X01110110X',
+    'mem[10002] = 18361339',
+    'mem[50031] = 261',
+    'mem[16419] = 537704',
+    'mem[48032] = 2783140'`
 )
+

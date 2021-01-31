@@ -60,6 +60,11 @@ function calculateCoordinates(recievedMessages) {
     });
 };
 
+module.exports = {
+    applyMask,
+    toBinary
+}
+
 decodingSoftware(
     [
         [
@@ -93,3 +98,4 @@ decodingSoftware(
         ]
     ]
 )
+
