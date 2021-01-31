@@ -1,14 +1,12 @@
-function decoding(input) {
+function decoding(inputParameters) {
 
     // Recieve Docking Parameters
-    let mask = input
-    .shift()
-    .split('mask = ')[1];
+    let bitMask = inputParameters.shift().split('mask = ')[1];
     let code = {};
     let result = 0;
 
     // Store Data
-    input.map(line => {
+    inputParameters.map(line => {
         let [memory, entry] = line.split(' = ');
         memory = memory
         .match(/[\d+]/g)
@@ -22,35 +20,36 @@ function decoding(input) {
 
     // Iterate through Input Codes
     for (let key in code) {
-        code[key].output = maskElements(mask, code[key].binary);
+        code[key].output = maskElements(bitMask, code[key].binary);
         result += code[key].output;
     }
-
-    // Masking each Element
-    function maskElements(mask, currentBinary) {
-        let splitMask = mask.split('');
-        currentBinary = currentBinary.split('');
-        for (let i = 0; i < 36; i++) {
-            if (splitMask[i] !== 'X') {
-                currentBinary[i] = splitMask[i];
-            }
-        }
-        currentBinary = currentBinary.join('');
-
-        // Convert Binary to Decimal
-        return parseInt(currentBinary, 2);
-    }
-
-    // Convert Decimal to Binary
-    function toBinary(n) {
-        let binary = parseInt(n, 10).toString(2);
-        let fill = '0'.repeat((36 - binary.length));
-        return fill.concat(binary);
-    }
-
+    
     // Printing Result
     console.log(result);
 }
+
+// Masking each Element
+function maskElements(bitMask, currentBinary) {
+    let splitMask = bitMask.split('');
+    currentBinary = currentBinary.split('');
+    for (let i = 0; i < 36; i++) {
+        if (splitMask[i] !== 'X') {
+            currentBinary[i] = splitMask[i];
+        }
+    }
+    currentBinary = currentBinary.join('');
+
+    // Convert Binary to Decimal
+    return parseInt(currentBinary, 2);
+}
+
+// Convert Decimal to Binary
+function toBinary(n) {
+    let binary = parseInt(n, 10).toString(2);
+    let fill = '0'.repeat((36 - binary.length));
+    return fill.concat(binary);
+}
+
 
 decoding(
     [
